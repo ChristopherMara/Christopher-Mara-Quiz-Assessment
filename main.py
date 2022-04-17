@@ -1,5 +1,8 @@
+#importing modules
+import random
 import math
 
+#defining reused functions
 def print_fancy(decoration, text): #prints lines with decorations
   print(decoration*math.ceil(len(text)/len(decoration)))
   print(text)
@@ -13,7 +16,9 @@ def int_input(prompt, error): #a function so that I can repeat it, prompt for pr
       return n
     except ValueError:
       print_fancy("*", error)
-    
+
+
+#defining component functions
 def ask_name(): #everything is stored in a function for easier assembly of the final program - this asks for name
   print_fancy("-=-","Welcome to my maths quiz!")
   global name
@@ -33,7 +38,7 @@ def customise(): #asks for customisation, stored in function for easier assembly
   #asking for length:
   #length = input('\nHow long would you like the quiz to be? \nEnter a whole number or "endless" if you do not want the quiz to have a length limit.')
   print("-" * 50 + '\nHow long would you like the quiz to be? \nEnter a whole number or "endless" if you do not want the quiz to have a length limit.')
-  while True:
+  while True: #this loop asks for length until endless or an integer is answered
     length = input(" > ")
     if length.lower() == "endless":
       break
@@ -45,25 +50,58 @@ def customise(): #asks for customisation, stored in function for easier assembly
         print_fancy("*", 'Please enter a whole number or "endless"')
   #asking for difficulty:
   print("-" * 50 + "\nWhat would you like the starting difficulty to be? Please enter a whole number between 2 and 20")
-  while True:
+  while True: #this loop asks for the difficulty until a number between 2 and 20 is input
     start_difficulty = int_input(" > ", "Please enter a whole number between 2 and 20") #this is a different variable to be able to restart with the same settings.
     if start_difficulty >= 2 and start_difficulty <= 20: #check if difficulty is between 2 and 20
       break
     print_fancy("*", "Please enter a whole number between 2 and 20")
-  #asking for difficulty scaling
+  #asking for difficulty scaling:
   print("-" * 50 + '\nWould you like the quiz to gradually get harder? (answer "yes" or "no") ')
-  while True:
+  while True: #This loop keeps asking for difficulty scaling until the end user answers 'yes' or 'no'
     difficulty_scaling = input(" > ")
     if difficulty_scaling.lower() == "yes" or difficulty_scaling.lower() == "no":
       break
     print_fancy("*", 'Please answer "yes" or "no"')
 
+def question(): #asks a question
+  global score
+  global difficulty
+  operators = ("*", "/") #stores operators
+  operator = operators[random.randrange(0,2)]
+  if operator == "*":
+    a = random.randrange(1, math.floor(difficulty))
+    b = random.randrange(1, math.floor(difficulty))
+  else:
+    b = random.randrange(1, math.floor(difficulty))
+    a = b * random.randrange(1, math.floor(difficulty))
+  question = str(a) + " " + operator + " " + str(b)
+  print("What is {}?".format(question))
+  answer = int(input(" > "))
+  if answer == eval(question): #checks if the answer is correct
+    print_fancy("=", "Correct!")
+    score += 1
+    if difficulty_scaling.lower() =="yes":
+      difficulty += 1/4
+    print("Your score is currently {}".format(score))
+    print("-"*50)
+  else: #if the answer is incorrect
+    print_fancy("/", "Incorrect")
+    print("The correct answer was {}".format(int(eval(question))))
+    print("-"*50)
+  
     
     
   
-#actual program
 ask_name()
 customise()
+#the following is just temporary just to test if the question function works, the questions will be looped properly later on
+score = 0
+difficulty = start_difficulty
+print("-"*50)
+print_fancy("-=-", "Press enter to start the quiz")
+input()
+while True:
+  question() 
 
 
 
