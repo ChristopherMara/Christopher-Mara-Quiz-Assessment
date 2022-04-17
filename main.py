@@ -76,11 +76,11 @@ def question(): #asks a question
     a = b * random.randrange(1, math.floor(difficulty))
   question = str(a) + " " + operator + " " + str(b)
   print("What is {}?".format(question))
-  answer = int(input(" > "))
-  if answer == eval(question): #checks if the answer is correct
+  answer = input(" > ")
+  if answer == str(round(eval(question))): #checks if the answer is correct
     print_fancy("=", "Correct!")
     score += 1
-    if difficulty_scaling.lower() =="yes":
+    if difficulty_scaling.lower() == "yes":
       difficulty += 1/4
     print("Your score is currently {}".format(score))
     print("-"*50)
