@@ -66,18 +66,17 @@ def customise(): #asks for customisation, stored in function for easier assembly
 def question(): #asks a question
   global score
   global difficulty
-  operators = ("*", "/") #stores operators
+  operators = ("x", "÷") #stores operators
   operator = operators[random.randrange(0,2)]
-  if operator == "*":
+  if operator == "x":
     a = random.randrange(1, math.floor(difficulty))
     b = random.randrange(1, math.floor(difficulty))
   else:
     b = random.randrange(1, math.floor(difficulty))
     a = b * random.randrange(1, math.floor(difficulty))
   question = str(a) + " " + operator + " " + str(b)
-  print("What is {}?".format(question))
-  answer = input(" > ")
-  if answer == str(round(eval(question))): #checks if the answer is correct
+  answer = int_input("What is {}?".format(question) + "\n > ", "Please answer with a whole number")
+  if answer == round(eval(question.replace('x', '*').replace('÷', '/'))): #checks if the answer is correct, changes 'x' to '*' and '÷' to '/' so that eval() works
     print_fancy("=", "Correct!")
     score += 1
     if difficulty_scaling.lower() == "yes":
@@ -86,8 +85,9 @@ def question(): #asks a question
     print("-"*50)
   else: #if the answer is incorrect
     print_fancy("/", "Incorrect")
-    print("The correct answer was {}".format(int(eval(question))))
+    print("The correct answer was {}".format(round(eval(question.replace('x', '*').replace('÷', '/')))))
     print("-"*50)
+
   
     
     
