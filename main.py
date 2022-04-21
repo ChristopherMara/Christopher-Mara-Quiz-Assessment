@@ -1,6 +1,7 @@
 #importing modules
 import random
 import math
+import time
 
 #defining reused functions
 def print_fancy(decoration, text): #prints lines with decorations
@@ -19,6 +20,7 @@ def int_input(prompt, error): #a function so that I can repeat it, prompt for pr
 
 
 #defining component functions
+      
 def ask_name(): #everything is stored in a function for easier assembly of the final program - this asks for name
   print_fancy("-=-","Welcome to my maths quiz!")
   global name
@@ -79,14 +81,37 @@ def question(): #asks a question
   if answer == round(eval(question.replace('x', '*').replace('÷', '/'))): #checks if the answer is correct, changes 'x' to '*' and '÷' to '/' so that eval() works
     print_fancy("=", "Correct!")
     score += 1
-    if difficulty_scaling.lower() == "yes":
+    if difficulty_scaling.lower() == "yes": #increases difficulty if difficulty scaling is on
       difficulty += 1/4
     print("Your score is currently {}".format(score))
     print("-"*50)
+    return "correct"
   else: #if the answer is incorrect
     print_fancy("/", "Incorrect")
     print("The correct answer was {}".format(round(eval(question.replace('x', '*').replace('÷', '/')))))
     print("-"*50)
+    return "incorrect"
+
+def start_quiz():
+  global score
+  global difficulty
+  score = 0
+  difficulty = start_difficulty
+  print("-"*50)
+  print_fancy("-=-", "Press enter to start the quiz")
+  input()
+  lives = 3
+  while True: #continuously asks questions: will be changed
+    start_time = time.time()
+    if question() == "incorrect":
+      lives -=1
+      print("You have {} incorrect answers left".format(lives))
+    time_taken = time.time() - start_time
+    print("Time: {} seconds".format(time_taken))
+    if lives <1:
+      break
+    
+  
 
   
     
@@ -94,14 +119,8 @@ def question(): #asks a question
   
 ask_name()
 customise()
-#the following is just temporary just to test if the question function works, the questions will be looped properly later on
-score = 0
-difficulty = start_difficulty
-print("-"*50)
-print_fancy("-=-", "Press enter to start the quiz")
-input()
-while True:
-  question() 
+start_quiz()
+print_fancy("®™", "{insert ending here}") #This is temporary
 
 
 
