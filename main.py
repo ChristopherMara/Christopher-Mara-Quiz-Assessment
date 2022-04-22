@@ -68,6 +68,7 @@ def customise(): #asks for customisation, stored in function for easier assembly
 def question(): #asks a question
   global score
   global difficulty
+  print("-"*50)
   operators = ("x", "÷") #stores operators
   operator = operators[random.randrange(0,2)]
   if operator == "x":
@@ -84,12 +85,10 @@ def question(): #asks a question
     if difficulty_scaling.lower() == "yes": #increases difficulty if difficulty scaling is on
       difficulty += 1/4
     print("Your score is currently {}".format(score))
-    print("-"*50)
     return "correct"
   else: #if the answer is incorrect
     print_fancy("/", "Incorrect")
     print("The correct answer was {}".format(round(eval(question.replace('x', '*').replace('÷', '/')))))
-    print("-"*50)
     return "incorrect"
 
 def start_quiz():
@@ -101,15 +100,30 @@ def start_quiz():
   print_fancy("-=-", "Press enter to start the quiz")
   input()
   lives = 3
-  while True: #continuously asks questions: will be changed
-    start_time = time.time()
-    if question() == "incorrect":
-      lives -=1
-      print("You have {} incorrect answers left".format(lives))
-    time_taken = time.time() - start_time
-    print("Time: {} seconds".format(time_taken))
-    if lives <1:
-      break
+  if length == "endless":
+    while True: #continuously asks questions if it is endless
+      start_time = time.time()
+      if question() == "incorrect":
+        lives -=1
+        if lives > 1: #if statement rather than .format{} to fix grammar mistake
+          print("You have {} incorrect answers left".format(lives))
+        else:
+          print("You have one incorrect answer left")
+      time_taken = round(time.time() - start_time, 2)
+      print("Time: {} seconds".format(time_taken))
+      if lives <1:
+        break
+  else:
+    for x in range(length): #only repeats based on length if not endless
+      start_time = time.time()
+      if question() == "incorrect":
+        lives -=1
+        print("You have {} incorrect answers left".format(lives))
+      time_taken = round(time.time() - start_time, 2)
+      print("Time: {} seconds".format(time_taken))
+      if lives <1:
+        break
+      
     
   
 
