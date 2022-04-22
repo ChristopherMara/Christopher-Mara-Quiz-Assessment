@@ -47,9 +47,12 @@ def customise(): #asks for customisation, stored in function for easier assembly
     else:
       try: 
         length = int(length)
-        break
+        if length > 0: #checks if the length is positive
+          break
+        else:
+          print_fancy("*", 'Please enter a positive whole number or "endless"')
       except ValueError:
-        print_fancy("*", 'Please enter a whole number or "endless"')
+        print_fancy("*", 'Please enter a positive whole number or "endless"')
   #asking for difficulty:
   print("-" * 50 + "\nWhat would you like the starting difficulty to be? Please enter a whole number between 2 and 20")
   while True: #this loop asks for the difficulty until a number between 2 and 20 is input
@@ -68,7 +71,6 @@ def customise(): #asks for customisation, stored in function for easier assembly
 def question(): #asks a question
   global score
   global difficulty
-  print("-"*50)
   operators = ("x", "÷") #stores operators
   operator = operators[random.randrange(0,2)]
   if operator == "x":
@@ -94,35 +96,31 @@ def question(): #asks a question
 def start_quiz():
   global score
   global difficulty
+  questions_asked = 0
   score = 0
   difficulty = start_difficulty
   print("-"*50)
   print_fancy("-=-", "Press enter to start the quiz")
   input()
   lives = 3
-  if length == "endless":
-    while True: #continuously asks questions if it is endless
-      start_time = time.time()
-      if question() == "incorrect":
-        lives -=1
-        if lives > 1: #if statement rather than .format{} to fix grammar mistake
-          print("You have {} incorrect answers left".format(lives))
-        else:
-          print("You have one incorrect answer left")
-      time_taken = round(time.time() - start_time, 2)
-      print("Time: {} seconds".format(time_taken))
-      if lives <1:
-        break
-  else:
-    for x in range(length): #only repeats based on length if not endless
-      start_time = time.time()
-      if question() == "incorrect":
-        lives -=1
+  while True: #continuously asks questions
+    start_time = time.time()
+    print("-"*50)
+    questions_asked += 1
+    if length == "endless": #tells user how many questions have been asked, and if it isn't endless, shows how many are left
+      print("Question {}:".format(questions_asked))
+    else:
+      print("Question {}/{}:".format(questions_asked, length))
+    if question() == "incorrect":
+      lives -=1
+      if lives > 1: #if statement to fix plural/singular grammar mistake
         print("You have {} incorrect answers left".format(lives))
-      time_taken = round(time.time() - start_time, 2)
-      print("Time: {} seconds".format(time_taken))
-      if lives <1:
-        break
+      else:
+        print("You have one incorrect answer left")
+    time_taken = round(time.time() - start_time, 2)
+    print("Time: {} seconds".format(time_taken))
+    if lives < 1 or questions_asked == length: #ends the loop after all lives are gone or enough questions has been asked
+      break
       
     
   
