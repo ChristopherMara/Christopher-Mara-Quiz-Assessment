@@ -93,7 +93,7 @@ def question(): #asks a question
     print("The correct answer was {}".format(round(eval(question.replace('x', '*').replace('÷', '/')))))
     return "incorrect"
 
-def start_quiz():
+def start_quiz(): #The actual quiz
   global score
   global difficulty
   questions_asked = 0
@@ -115,8 +115,8 @@ def start_quiz():
       lives -=1
       if lives > 1: #if statement to fix plural/singular grammar mistake
         print("You have {} incorrect answers left".format(lives))
-      else:
-        print("You have one incorrect answer left")
+      elif lives == 1:
+        print("You have 1 incorrect answer left")
     time_taken = round(time.time() - start_time, 2)
     print("Time: {} seconds".format(time_taken))
     if lives < 1 or questions_asked == length: #ends the loop after all lives are gone or enough questions has been asked
