@@ -54,12 +54,12 @@ def customise(): #asks for customisation, stored in function for easier assembly
       except ValueError:
         print_fancy("*", 'Please enter a positive whole number or "endless"')
   #asking for difficulty:
-  print("-" * 50 + "\nWhat would you like the starting difficulty to be? Please enter a whole number between 2 and 20")
-  while True: #this loop asks for the difficulty until a number between 2 and 20 is input
-    start_difficulty = int_input(" > ", "Please enter a whole number between 2 and 20") #this is a different variable to be able to restart with the same settings.
-    if start_difficulty >= 2 and start_difficulty <= 20: #check if difficulty is between 2 and 20
+  print("-" * 50 + "\nWhat would you like the starting difficulty to be? Please enter a whole number between 5 and 20")
+  while True: #this loop asks for the difficulty until a number between 5 and 20 is input
+    start_difficulty = int_input(" > ", "Please enter a whole number between 5 and 20") #this is a different variable to be able to restart with the same settings.
+    if start_difficulty >= 5 and start_difficulty <= 20: #check if difficulty is between 5 and 20
       break
-    print_fancy("*", "Please enter a whole number between 2 and 20")
+    print_fancy("*", "Please enter a whole number between 5 and 20")
   #asking for difficulty scaling:
   print("-" * 50 + '\nWould you like the quiz to gradually get harder? (answer "yes" or "no") ')
   while True: #This loop keeps asking for difficulty scaling until the end user answers 'yes' or 'no'
@@ -72,13 +72,13 @@ def question(): #asks a question
   global score
   global difficulty
   operators = ("x", "÷") #stores operators
-  operator = operators[random.randrange(0,2)]
+  operator = operators[random.randint(0,1)]
   if operator == "x":
-    a = random.randrange(1, math.floor(difficulty))
-    b = random.randrange(1, math.floor(difficulty))
+    a = random.randint(1, math.floor(difficulty))
+    b = random.randint(1, math.floor(difficulty))
   else:
-    b = random.randrange(1, math.floor(difficulty))
-    a = b * random.randrange(1, math.floor(difficulty))
+    b = random.randint(1, math.floor(difficulty))
+    a = b * random.randint(1, math.floor(difficulty))
   question = str(a) + " " + operator + " " + str(b)
   answer = int_input("What is {}?".format(question) + "\n > ", "Please answer with a whole number")
   if answer == round(eval(question.replace('x', '*').replace('÷', '/'))): #checks if the answer is correct, changes 'x' to '*' and '÷' to '/' so that eval() works
@@ -126,17 +126,36 @@ def start_quiz(): #The actual quiz
     print("Time: {} seconds".format(time_taken))
     if lives < 1 or questions_asked == length: #ends the loop after all lives are gone or enough questions has been asked
       break
+  #the following code takes place after the quiz has ended
+  print("-"*50)
+  print_fancy("=", "Congratulations!")
+  print("You scored {} points! \nYou spent an average of {} seconds per question." .format(score, round(total_time/questions_asked, 2)))
+  print('\nWould you like to replay the quiz with the same settings? (please answer "yes" or "no")')
+  while True: #continuously asks question until a valid answer is entered
+    replay = input(" > ").lower()
+    if replay == "no": #thanks user, breaks loop so the quiz ends
+      print_fancy("-=-", "Thank you for playing my quiz!")
+      break
+    elif replay == "yes": #recalls itself (start_quiz()) to repeat quiz, then breaks so that if the user decides to stop later on, the program ends
+      start_quiz()
+      break
+    else:
+      print_fancy("*", 'Please enter "yes" or "no"')
      
   
 ask_name()
 customise()
-while True:
+start_quiz()
+
+"""
+while True: #loop causes the quiz to be continuously repeated until broken
   start_quiz()
   print("-"*50)
   print_fancy("=", "Congratulations!")
   print("You scored {} points! \nYou spent an average of {} seconds per question." .format(score, round(total_time/questions_asked, 2)))
   print('\nWould you like to replay the quiz with the same settings? (please answer "yes" or "no")')
   replay = input(" > ").lower()
-  if not replay == "yes":
+  if not replay == "yes": #breaks loop and stops quiz from replaying if user doesn't enter yes
     print_fancy("-=-", "Thank you for playing my quiz!")
     break
+"""
