@@ -4,7 +4,7 @@ import math
 import time
 
 #defining reused functions
-def print_fancy(decoration, text): #prints lines with decorations
+def print_fancy(decoration, text): #prints lines of decorations around text
   print(decoration*math.ceil(len(text)/len(decoration)))
   print(text)
   print(decoration*math.ceil(len(text)/len(decoration)))
@@ -31,7 +31,7 @@ def ask_name(): #everything is stored in a function for easier assembly of the f
       break
     else:
       print_fancy ("*","Please only enter letters")
-  print("\nHello, " + name + "! \nThis is a multiplication and division maths quiz. \nYou can decide the length and starting difficulty. \nIf you allow it to, the quiz will gradually get harder. \nAfter 3 incorrect answers, the quiz will end. \nThe time it takes for you to answer each question will also be timed.")
+  print("\nHello, " + name + "! \nThis is a basic multiplication and division maths quiz. \nYou can decide the length and starting difficulty. \nIf you allow it to, the quiz will gradually get harder. \nAfter 3 incorrect answers, the quiz will end. \nThe time it takes for you to answer each question will also be timed.")
 
 def customise(): #asks for customisation, stored in function for easier assembly
   global length
@@ -39,7 +39,7 @@ def customise(): #asks for customisation, stored in function for easier assembly
   global difficulty_scaling
   #asking for length:
   #length = input('\nHow long would you like the quiz to be? \nEnter a whole number or "endless" if you do not want the quiz to have a length limit.')
-  print("-" * 50 + '\nHow long would you like the quiz to be? \nEnter a whole number or "endless" if you do not want the quiz to have a length limit.')
+  print("-" * 50 + '\nHow many questions would you like the quiz to be? \nEnter a whole number or "endless" if you do not want the quiz to have a length limit.')
   while True: #this loop asks for length until endless or an integer is answered
     length = input(" > ")
     if length.lower() == "endless":
@@ -63,8 +63,8 @@ def customise(): #asks for customisation, stored in function for easier assembly
   #asking for difficulty scaling:
   print("-" * 50 + '\nWould you like the quiz to gradually get harder? (answer "yes" or "no") ')
   while True: #This loop keeps asking for difficulty scaling until the end user answers 'yes' or 'no'
-    difficulty_scaling = input(" > ")
-    if difficulty_scaling.lower() == "yes" or difficulty_scaling.lower() == "no":
+    difficulty_scaling = input(" > ").lower()
+    if difficulty_scaling == "yes" or difficulty_scaling == "no":
       break
     print_fancy("*", 'Please answer "yes" or "no"')
 
@@ -84,7 +84,7 @@ def question(): #asks a question
   if answer == round(eval(question.replace('x', '*').replace('÷', '/'))): #checks if the answer is correct, changes 'x' to '*' and '÷' to '/' so that eval() works
     print_fancy("=", "Correct!")
     score += 1
-    if difficulty_scaling.lower() == "yes": #increases difficulty if difficulty scaling is on
+    if difficulty_scaling == "yes": #increases difficulty if difficulty scaling is on
       difficulty += 1/4
     print("Your score is currently {}".format(score))
     return "correct"
@@ -96,13 +96,17 @@ def question(): #asks a question
 def start_quiz(): #The actual quiz
   global score
   global difficulty
+  global total_time
+  global questions_asked
+  #sets/resets questions asked, score, difficulty, total time, and lives
+  total_time = 0
   questions_asked = 0
   score = 0
+  lives = 3
   difficulty = start_difficulty
   print("-"*50)
   print_fancy("-=-", "Press enter to start the quiz")
   input()
-  lives = 3
   while True: #continuously asks questions
     start_time = time.time()
     print("-"*50)
@@ -118,23 +122,21 @@ def start_quiz(): #The actual quiz
       elif lives == 1:
         print("You have 1 incorrect answer left")
     time_taken = round(time.time() - start_time, 2)
+    total_time += time_taken
     print("Time: {} seconds".format(time_taken))
     if lives < 1 or questions_asked == length: #ends the loop after all lives are gone or enough questions has been asked
       break
-      
-    
-  
-
-  
-    
-    
+     
   
 ask_name()
 customise()
-start_quiz()
-print_fancy("®™", "{insert ending here}") #This is temporary
-
-
-
-
-
+while True:
+  start_quiz()
+  print("-"*50)
+  print_fancy("=", "Congratulations!")
+  print("You scored {} points! \nYou spent an average of {} seconds per question." .format(score, round(total_time/questions_asked, 2)))
+  print('\nWould you like to replay the quiz with the same settings? (please answer "yes" or "no")')
+  replay = input(" > ").lower()
+  if not replay == "yes":
+    print_fancy("-=-", "Thank you for playing my quiz!")
+    break
