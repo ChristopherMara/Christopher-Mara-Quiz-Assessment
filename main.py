@@ -41,8 +41,8 @@ def customise(): #asks for customisation, stored in function for easier assembly
   #length = input('\nHow long would you like the quiz to be? \nEnter a whole number or "endless" if you do not want the quiz to have a length limit.')
   print("-" * 50 + '\nHow many questions would you like the quiz to be? \nEnter a whole number or "endless" if you do not want the quiz to have a length limit.')
   while True: #this loop asks for length until endless or an integer is answered
-    length = input(" > ")
-    if length.lower() == "endless":
+    length = input(" > ").lower()
+    if length == "endless":
       break
     else:
       try: 
@@ -104,6 +104,14 @@ def start_quiz(): #The actual quiz
   score = 0
   lives = 3
   difficulty = start_difficulty
+  #print statements to debug, they should be 0, starting_difficulty, 0, 3, 0 respectively:
+  """
+  print("Score: {}".format(score))
+  print("Difficulty: {}".format(difficulty))
+  print("total_time: {}".format(total_time))
+  print("lives: {}".format(lives))
+  print("questions_asked: {}".format(questions_asked))
+  """
   print("-"*50)
   print_fancy("-=-", "Press enter to start the quiz")
   input()
@@ -128,7 +136,7 @@ def start_quiz(): #The actual quiz
       break
   #the following code takes place after the quiz has ended
   print("-"*50)
-  print_fancy("=", "Congratulations!")
+  print_fancy("♦", "Congratulations!")
   print("You scored {} points! \nYou spent an average of {} seconds per question." .format(score, round(total_time/questions_asked, 2)))
   print('\nWould you like to replay the quiz with the same settings? (please answer "yes" or "no")')
   while True: #continuously asks question until a valid answer is entered
@@ -146,16 +154,3 @@ def start_quiz(): #The actual quiz
 ask_name()
 customise()
 start_quiz()
-
-"""
-while True: #loop causes the quiz to be continuously repeated until broken
-  start_quiz()
-  print("-"*50)
-  print_fancy("=", "Congratulations!")
-  print("You scored {} points! \nYou spent an average of {} seconds per question." .format(score, round(total_time/questions_asked, 2)))
-  print('\nWould you like to replay the quiz with the same settings? (please answer "yes" or "no")')
-  replay = input(" > ").lower()
-  if not replay == "yes": #breaks loop and stops quiz from replaying if user doesn't enter yes
-    print_fancy("-=-", "Thank you for playing my quiz!")
-    break
-"""
